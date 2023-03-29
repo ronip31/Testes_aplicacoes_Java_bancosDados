@@ -90,7 +90,7 @@ public class Utils {
 		String nome = teclado.nextLine();
 		
 		System.out.println("Informe o preco do produdo: ");
-		float preco = teclado.nextFloat();
+		float preco = Float.parseFloat(teclado.next());
 		
 		System.out.println("Informe a quantidade em estoque: ");
 		int estoque = teclado.nextInt();
