@@ -109,7 +109,7 @@ public class Utils {
 			salvar.close();
 			desconectar(conn);
 			
-			System.out.println("O produto " +  nome + "  " + "  foi inserido com sucesso.");
+			System.out.println("O produto " +  nome + "  foi inserido com sucesso.");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,16 +120,19 @@ public class Utils {
 	}
 	
 	public static void atualizar() {
-		System.out.println("informe o cdigo do produto: ");
+		System.out.println("informe o codigo do produto: ");
 		int id =  Integer.parseInt(teclado.nextLine());
 		
 		String BUSCAR_POR_ID = "SELECT * FROM produtos WHERE id=?";
 		
 		try {
+			
+			
+					
 			Connection conn = conectar();
-			PreparedStatement produto = conn.prepareStatement(BUSCAR_POR_ID);		
-			produto.setInt(1, id);
-			ResultSet res = produto.executeQuery();
+			PreparedStatement produtos = conn.prepareStatement(BUSCAR_POR_ID, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);	
+			produtos.setInt(1, id);
+			ResultSet res = produtos.executeQuery();
 			
 			res.last();
 			int qtd = res.getRow();
@@ -145,7 +148,7 @@ public class Utils {
 				System.out.println("Informe a quantidade do produto: ");
 				int estoque = teclado.nextInt();
 				
-				String ATUALIZAR = "UPDATE produto SET nome=?, preco=?, estoque=? WHERE id=?";
+				String ATUALIZAR = "UPDATE produtos SET nome=?, preco=?, estoque=? WHERE id=?";
 				PreparedStatement upd = conn.prepareStatement(ATUALIZAR);
 				
 				upd.setString(1, nome);
@@ -172,12 +175,45 @@ public class Utils {
 	}
 	
 	public static void deletar() {
-		System.out.println("Deletando produtos...");
+		//System.out.println("Deletando produtos...");
+		String DELETAR = "DELETE FROM produtos  WHERE id=?";
+		String BUSCAR_POR_ID = "SELECT * FROM produtos WHERE id=?";
+		
+		System.out.println("Informe o codigo do produto para ser deletado: ");
+		int id = Integer.parseInt(teclado.nextLine());
+		
+		try {
+			Connection conn = conectar();
+			PreparedStatement produtos = conn.prepareStatement(BUSCAR_POR_ID, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);	
+			produtos.setInt(1, id);
+			ResultSet res = produtos.executeQuery();
+			
+			res.last();
+			int qtd = res.getRow();
+			res.beforeFirst();
+			
+			if(qtd > 0) {
+				PreparedStatement del = conn.prepareStatement(DELETAR);
+				del.setInt(1, id);
+				del.executeUpdate();
+				del.close();
+				desconectar(conn);
+				System.out.println("O Produto foi deletado com sucesso.");
+							
+			}else {
+				System.out.println("Nao existe o produto com o codigo informado.");
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Erro ao deletar produto.");
+			System.exit(-42);
+		}
 	}
 	
 	public static void menu() {
 		System.out.println("==================Gerenciamento de Produtos===============");
-		System.out.println("Selecione uma opção: ");
+		System.out.println("Selecione uma opcao: ");
 		System.out.println("1 - Listar produtos.");
 		System.out.println("2 - Inserir produtos.");
 		System.out.println("3 - Atualizar produtos.");

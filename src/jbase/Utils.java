@@ -14,7 +14,7 @@ public class Utils {
 		System.out.println("Desconectando...");
 	}
 	
-	public static void listard() {
+	public static void listar() {
 		System.out.println("Listando produtos...");
 	}
 	
