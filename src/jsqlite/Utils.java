@@ -127,13 +127,13 @@ public class Utils {
 			System.out.println("Informe a quantidade em estoque: ");
 			int estoque = teclado.nextInt();
 			
-			String ATUALIZAR = "UPDATE protudos SET nome=?, preco=?, estoque=? where id=?";
+			String ATUALIZAR = "UPDATE produtos SET nome=?, preco=?, estoque=? where id=?";
 			
 			PreparedStatement upd = conn.prepareStatement(ATUALIZAR);
 			
 			upd.setString(1, nome);
 			upd.setFloat(2, preco);
-			upd.setInt(2, estoque);
+			upd.setInt(3, estoque);
 			upd.setInt(4, id);
 			
 			int res = upd.executeUpdate();
