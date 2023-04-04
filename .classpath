@@ -8,5 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/mysql-connector-j-8.0.32.jar"/>
 	<classpathentry kind="lib" path="libs/postgresql-42.6.0.jar"/>
+	<classpathentry kind="lib" path="libs/sqlite-jdbc-3.41.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
