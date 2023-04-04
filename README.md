@@ -2,3 +2,4 @@
 Com os bancos:
 * MYSQL
 * POSTGRESQL
+* SQLITE
