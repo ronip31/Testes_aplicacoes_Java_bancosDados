@@ -1,5 +1,6 @@
 package jmongodb;
 
+import java.lang.System.Logger.Level;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -17,6 +18,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import com.mongodb.diagnostics.logging.Logger;
 
 import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Updates.set;
@@ -26,6 +28,8 @@ public class Utils {
 	static Scanner teclado = new Scanner(System.in);
 	
 	public static MongoCollection<Document> conectar () {
+		Logger logger = Logger.getLogger("org.mongodb.driver");
+		logger.setLevel(Level.SEVERE);
 		try {
 			MongoClient conn = MongoClients.create(
 					MongoClientSettings.builder()
@@ -130,6 +134,7 @@ public class Utils {
 		
 		Bson query = combine(set("nome",nome), set("preco", preco), set("estoque", estoque));
 		
+		try {
 		UpdateResult res = collection.updateOne(new Document("_id", new ObjectId(_id)), query);
 		
 		if(res.getModifiedCount() ==1) {
@@ -138,7 +143,9 @@ public class Utils {
 		}else {
 			System.out.println("O produto não pode ser atualizado.");
 		}
-		
+		}catch(java.lang.IllegalArgumentException e) {
+			System.out.println("ID inválido.");
+		}
 	}
 	
 	public static void deletar() {
@@ -146,17 +153,21 @@ public class Utils {
 		
 		System.out.println("Informe o ID do produto: ");
 		String _id = teclado.nextLine();
-		
-		DeleteResult res = collection.deleteOne(new Document("_id", new ObjectId(_id)));
-		
-		if(res.getDeletedCount() ==1) {
-			System.out.println("O produto foi excluido com sucesso.");
+		try {
+			DeleteResult res = collection.deleteOne(new Document("_id", new ObjectId(_id)));
 			
-		}else {
-			System.out.println("Nao foi possivel excluir o produto.");
-		}
+			if(res.getDeletedCount() ==1) {
+				System.out.println("O produto foi excluido com sucesso.");
+				
+			}else {
+				System.out.println("Nao foi possivel excluir o produto.");
+				}
+		 }catch(java.lang.IllegalArgumentException e) {
+			System.out.println("ID inválido.");
+		 }
+		
 	}
-	
+
 	public static void menu() {
 		System.out.println("==================Gerenciamento de Produtos===============");
 		System.out.println("Selecione uma opção: ");
