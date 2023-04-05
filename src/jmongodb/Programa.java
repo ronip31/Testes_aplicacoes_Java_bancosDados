@@ -1,5 +1,6 @@
 package jmongodb;
 
+import jbase.Utils;
 
 public class Programa {
 
