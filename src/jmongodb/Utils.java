@@ -34,6 +34,7 @@ public class Utils {
 					.build());
 					
 			MongoDatabase database = conn.getDatabase("jmongo");
+			
 			MongoCollection<Document> collection = database.getCollection("produtos");
 			
 			return collection;
@@ -59,10 +60,13 @@ public class Utils {
 				while(cursor.hasNext()) {
 					String json = cursor.next().toJson();
 					
-					JSONObject obj = new JSONObject(json);
-					JSONObject id = obj.getJSONObject("id");
 					
-					System.out.println("ID: " + id.get("$oid"));
+					
+					
+					JSONObject obj = new JSONObject(json);
+					JSONObject _id = obj.getJSONObject("_id");
+					
+					System.out.println("ID: " + _id.get("$oid"));
 					System.out.println("Produto: " + obj.get("nome"));
 					System.out.println("Preco: " + obj.get("preco"));
 					System.out.println("Estoque: " + obj.get("estoque"));
